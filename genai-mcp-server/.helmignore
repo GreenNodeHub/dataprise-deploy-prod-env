@@ -1,0 +1,8 @@
+.DS_Store
+.git/
+.gitignore
+*.tmproj
+.idea/
+.vscode/
+# Sample manifests are applied by hand, never packaged into the release.
+secret.example.yaml

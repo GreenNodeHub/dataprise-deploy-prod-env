@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "app.fullname" . }}
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+  {{- with .Values.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "app.selectorLabels" . | nindent 4 }}
+{{- range .Values.extraServices }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .name }}
+  namespace: {{ $.Values.namespace | default $.Release.Namespace }}
+  labels:
+    {{- include "app.labels" $ | nindent 4 }}
+spec:
+  type: {{ .type | default "ClusterIP" }}
+  ports:
+    - port: {{ .port }}
+      targetPort: {{ include "app.portName" . }}
+      protocol: TCP
+      name: {{ include "app.portName" . }}
+  selector:
+    {{- include "app.selectorLabels" $ | nindent 4 }}
+{{- end }}

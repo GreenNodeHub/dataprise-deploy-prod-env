@@ -1,0 +1,148 @@
+# cube-api: REST API (4000) + SQL API (15432).
+#
+# The refresh worker runs the SAME image from this same chart with a second
+# release — see values-worker.yaml.
+#
+# cubestore-router is deliberately NOT part of this chart: it runs the stock
+# cubejs/cubestore image, is deployed separately, and until it exists alongside
+# this release CUBEJS_ENABLE_PREAGG must stay "false".
+#
+# Secrets are NOT in this chart. Fill in secret.example.yaml and apply it first.
+
+appname: data-context-layer
+namespace: stg-genai-platform
+
+replicaCount: 1
+
+image:
+  registry: hub-cls.vngcloud.tech
+  repository: stg/data-context-layer
+  tag: "494e580-stg-deploy-cube-32"
+  pullPolicy: IfNotPresent
+
+imagePullSecrets:
+  - name: image-pull-secret
+
+# Holds CUBEJS_JDBC_URL, CUBEJS_DB_USER, CUBEJS_DB_PASS, CUBEJS_API_SECRET.
+existingSecret: data-context-layer-env
+existingSecretFile: ""
+secretFileMountPath: /config
+
+env:
+  - name: TZ
+    value: Asia/Ho_Chi_Minh
+  - name: CUBEJS_DEV_MODE
+    value: "true"
+  - name: CUBEJS_DB_TYPE
+    value: hive
+  - name: CUBEJS_JDBC_DRIVER
+    value: org.apache.kyuubi.jdbc.KyuubiHiveDriver
+  - name: CUBEJS_KYUUBI_JDBC_JAR
+    value: /cube/drivers/kyuubi-hive-jdbc-shaded-1.9.1.jar,/cube/drivers/hadoop-conf-stub.jar
+  - name: CUBEJS_JDBC_FETCH_SIZE
+    value: "10000"
+  - name: CUBEJS_JDBC_MAX_POOL_SIZE
+    value: "10"
+  - name: CUBEJS_JDBC_MIN_POOL_SIZE
+    value: "2"
+  - name: CUBEJS_JDBC_ACQUIRE_TIMEOUT_MS
+    value: "10000"
+  - name: CUBEJS_JDBC_IDLE_TIMEOUT_MS
+    value: "600000"
+  - name: CUBEJS_CONTINUE_WAIT_TIMEOUT
+    value: "5"
+  - name: CUBEJS_ENABLE_PREAGG
+    value: "false"
+
+extraEnvFrom: []
+
+service:
+  type: ClusterIP
+  port: 4000
+  annotations: {}
+
+# Postgres-wire SQL API, consumed in-cluster (Cube's SQL endpoint).
+extraServices:
+  - name: data-context-layer-sql
+    type: ClusterIP
+    port: 15432
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+  hosts:
+    - host: hcm-03.console.vngcloud.tech
+      paths:
+        - path: /genai-platform/data-context-layer(/|$)(.*)
+          pathType: Prefix
+  tls:
+    - secretName: cert-console-vngcloud-tech
+      hosts:
+        - hcm-03.console.vngcloud.tech
+
+resources:
+  requests:
+    cpu: 500m
+    memory: 1Gi
+  limits:
+    cpu: "1"
+    memory: 2Gi
+
+readinessProbe:
+  httpGet:
+    path: /readyz
+    port: 4000
+  initialDelaySeconds: 30
+  periodSeconds: 15
+  timeoutSeconds: 10
+  # Schema + first refresh can be slow, so allow ~10 minutes before giving up.
+  failureThreshold: 40
+# Liveness stays disabled: /livez can report DOWN while the first
+# pre-aggregation/schema load is still running, which would crash-loop the pod.
+livenessProbe: {}
+startupProbe: {}
+
+terminationGracePeriodSeconds: 60
+
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 0
+
+serviceAccount:
+  create: false
+  name: ""
+  annotations: {}
+  automount: true
+
+podAnnotations: {}
+podLabels: {}
+podSecurityContext: {}
+securityContext: {}
+
+command: []
+args: []
+
+volumes: []
+volumeMounts: []
+
+vpa:
+  enabled: false
+  updateMode: Recreate
+  minAllowed:
+    cpu: 500m
+    memory: 1Gi
+  maxAllowed:
+    cpu: "1"
+    memory: 2Gi
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+hostAliases: []

@@ -1,0 +1,64 @@
+# cube-refresh-worker: same image, background scheduled-refresh process, no HTTP
+# traffic. Install as a second release of this chart:
+#   helm upgrade -i data-context-layer-worker ./data-context-layer \
+#     -f data-context-layer/values.yaml -f data-context-layer/values-worker.yaml
+# (or a second ArgoCD Application with both valueFiles — see argocd/.)
+
+appname: data-context-layer-worker
+
+existingSecret: data-context-layer-worker-env
+
+# Only the refresh flag differs from the API workload; the JDBC block is
+# identical because both processes talk to the same Kyuubi endpoint.
+env:
+  - name: TZ
+    value: Asia/Ho_Chi_Minh
+  - name: CUBEJS_REFRESH_WORKER
+    value: "true"
+  - name: CUBEJS_DEV_MODE
+    value: "true"
+  - name: CUBEJS_DB_TYPE
+    value: hive
+  - name: CUBEJS_JDBC_DRIVER
+    value: org.apache.kyuubi.jdbc.KyuubiHiveDriver
+  - name: CUBEJS_KYUUBI_JDBC_JAR
+    value: /cube/drivers/kyuubi-hive-jdbc-shaded-1.9.1.jar,/cube/drivers/hadoop-conf-stub.jar
+  - name: CUBEJS_JDBC_FETCH_SIZE
+    value: "10000"
+  - name: CUBEJS_JDBC_MAX_POOL_SIZE
+    value: "10"
+  - name: CUBEJS_JDBC_MIN_POOL_SIZE
+    value: "2"
+  - name: CUBEJS_JDBC_ACQUIRE_TIMEOUT_MS
+    value: "10000"
+  - name: CUBEJS_JDBC_IDLE_TIMEOUT_MS
+    value: "600000"
+  - name: CUBEJS_CONTINUE_WAIT_TIMEOUT
+    value: "5"
+  - name: CUBEJS_ENABLE_PREAGG
+    value: "false"
+
+# No inbound traffic: no ingress, no SQL service, no probes.
+ingress:
+  enabled: false
+extraServices: []
+readinessProbe: {}
+livenessProbe: {}
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    cpu: 500m
+    memory: 1Gi
+
+vpa:
+  enabled: false
+  updateMode: Recreate
+  minAllowed:
+    cpu: 250m
+    memory: 512Mi
+  maxAllowed:
+    cpu: 500m
+    memory: 1Gi

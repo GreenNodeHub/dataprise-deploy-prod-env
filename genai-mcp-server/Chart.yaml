@@ -1,0 +1,9 @@
+apiVersion: v2
+name: genai-mcp-server
+description: MCP feature-reference server with Entra ID OAuth (Projects/genai-mcp-server)
+type: application
+# version = chart version, bumped when templates change.
+version: 0.1.0
+# appVersion tracks the service; the image tag is set per-environment instead,
+# so this is only the fallback when image.tag is empty.
+appVersion: "1.0.0"

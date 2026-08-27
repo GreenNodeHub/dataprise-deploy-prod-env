@@ -1,0 +1,7 @@
+apiVersion: v2
+name: data-context-layer
+description: Cube semantic layer over Spark/Kyuubi (Projects/cubejs-service)
+type: application
+version: 0.1.0
+# The image is cubejs/cube:v1.1.18-jdk with cube.js/drivers/models baked in.
+appVersion: "1.1.18"

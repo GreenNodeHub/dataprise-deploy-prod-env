@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: genai-mcp-server
+  namespace: argocd
+spec:
+  project: genai-platform
+  source:
+    repoURL: https://github.com/vngcloud/helm-repo.git
+    path: genai-mcp-server
+    targetRevision: main
+    helm:
+      valueFiles:
+        - values.yaml
+      parameters:
+        # Set by CI on each build; everything else lives in values.yaml.
+        - name: image.tag
+          value: "20e715f-stg-dcr-mcp-31"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: stg-genai-platform
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=false

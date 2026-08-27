@@ -1,0 +1,58 @@
+# Two Applications: cube-api and the refresh worker. Both point at the same
+# chart path; the worker adds values-worker.yaml on top.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: data-context-layer
+  namespace: argocd
+spec:
+  project: genai-platform
+  source:
+    repoURL: https://github.com/vngcloud/helm-repo.git
+    path: data-context-layer
+    targetRevision: main
+    helm:
+      valueFiles:
+        - values.yaml
+      parameters:
+        # Set by CI on each build; everything else lives in values.yaml.
+        - name: image.tag
+          value: "494e580-stg-deploy-cube-32"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: stg-genai-platform
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=false
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: data-context-layer-worker
+  namespace: argocd
+spec:
+  project: genai-platform
+  source:
+    repoURL: https://github.com/vngcloud/helm-repo.git
+    path: data-context-layer
+    targetRevision: main
+    helm:
+      # Order matters: values-worker.yaml overrides the API defaults.
+      valueFiles:
+        - values.yaml
+        - values-worker.yaml
+      parameters:
+        - name: image.tag
+          value: "494e580-stg-deploy-cube-32"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: stg-genai-platform
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=false
