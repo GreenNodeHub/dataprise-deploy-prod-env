@@ -1,0 +1,42 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vdataprise-agentic-stg
+  namespace: argocd
+spec:
+  project: vdataprise-agentic-stg
+  source:
+    repoURL: https://github.com/GreenNodeHub/dataprise-deploy-prod-env
+    path: vdataprise-agentic
+    targetRevision: main
+    helm:
+      valueFiles:
+        - values.yaml
+      parameters:
+        # Secrets below are placeholders: inject from a sealed/external secret
+        # or the ArgoCD CLI, do not commit real values.
+        - name: imagePullSecretContent
+          value: "<base64-dockerconfigjson>"
+        - name: kubeConfig
+          value: "<base64-kubeconfig>"
+        - name: clientCert
+          value: "<base64-client-cert>"
+        - name: clientKey
+          value: "<base64-client-key>"
+        - name: oidc.serviceSA.clientId
+          value: "<service-sa-client-id>"
+        - name: oidc.serviceSA.clientSecret
+          value: "<service-sa-client-secret>"
+        - name: oidc.userSA.clientId
+          value: "<user-sa-client-id>"
+        - name: oidc.userSA.clientSecret
+          value: "<user-sa-client-secret>"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: stg-vdataprise-agentic
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=false
