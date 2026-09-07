@@ -15,8 +15,8 @@ namespace: stg-genai-platform
 replicaCount: 1
 
 image:
-  registry: hub-cls.vngcloud.tech
-  repository: stg/data-context-layer
+  registry: vcr.vngcloud.vn
+  repository: 60108-backend-worker/portal-external/stg/data-context-layer
   tag: "c352c40-stg-deploy-cube-36"
   pullPolicy: IfNotPresent
 

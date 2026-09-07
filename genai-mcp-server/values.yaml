@@ -11,8 +11,8 @@ namespace: stg-genai-platform
 replicaCount: 1
 
 image:
-  registry: hub-cls.vngcloud.tech
-  repository: stg/genai-mcp-server
+  registry: vcr.vngcloud.vn
+  repository: 60108-backend-worker/portal-external/stg/genai-mcp-server
   tag: "b4b02f1-stg-data-mcp-tools-39"
   pullPolicy: IfNotPresent
 
