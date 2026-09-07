@@ -98,11 +98,12 @@ readinessProbe:
   httpGet:
     path: /readyz
     port: 4000
-  initialDelaySeconds: 30
-  periodSeconds: 15
-  timeoutSeconds: 10
-  # Schema + first refresh can be slow, so allow ~10 minutes before giving up.
-  failureThreshold: 40
+  initialDelaySeconds: 60
+  periodSeconds: 30
+  timeoutSeconds: 30
+  # /readyz runs a test query against Kyuubi over SSL, so a single check can
+  # take well over 10s. ~10 minutes total before giving up.
+  failureThreshold: 20
 # Liveness stays disabled: /livez can report DOWN while the first
 # pre-aggregation/schema load is still running, which would crash-loop the pod.
 livenessProbe: {}
