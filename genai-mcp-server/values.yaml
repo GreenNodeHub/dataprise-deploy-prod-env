@@ -13,7 +13,7 @@ replicaCount: 1
 image:
   registry: hub-cls.vngcloud.tech
   repository: stg/genai-mcp-server
-  tag: "20e715f-stg-dcr-mcp-31"
+  tag: "b4b02f1-stg-data-mcp-tools-39"
   pullPolicy: IfNotPresent
 
 imagePullSecrets:

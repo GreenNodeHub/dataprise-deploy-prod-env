@@ -17,7 +17,7 @@ replicaCount: 1
 image:
   registry: hub-cls.vngcloud.tech
   repository: stg/data-context-layer
-  tag: "494e580-stg-deploy-cube-32"
+  tag: "c352c40-stg-deploy-cube-36"
   pullPolicy: IfNotPresent
 
 imagePullSecrets:
