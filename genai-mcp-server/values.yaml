@@ -17,8 +17,9 @@ image:
   pullPolicy: IfNotPresent
 
 imagePullSecrets:
-  - name: imagePullSecretContent
+  - name: image-pull-secret
 
+imagePullSecretContent: ""
 # Secret holding MS_TENANT_ID / MS_CLIENT_ID / REDIS_URL / ... injected via envFrom.
 # Must already exist in the namespace (see secret.example.yaml).
 existingSecret: genai-mcp-server-env
