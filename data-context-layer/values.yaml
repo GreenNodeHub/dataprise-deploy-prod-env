@@ -11,7 +11,7 @@
 
 appname: data-context-layer
 namespace: stg-genai-platform
-
+ 
 replicaCount: 1
 
 image:
