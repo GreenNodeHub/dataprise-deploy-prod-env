@@ -58,7 +58,7 @@ env:
 extraEnvFrom: []
 
 service:
-  type: NodePort
+  type: ClusterIP
   port: 4000
   annotations: {}
 
