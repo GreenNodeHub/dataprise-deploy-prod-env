@@ -25,6 +25,9 @@ imagePullSecretContent: ""
 existingSecret: genai-mcp-server-env
 # Secret mounted as files (datasources.json). Empty disables the mount.
 existingSecretFile: genai-mcp-server-file
+# Base64-encoded file contents, filled from the ArgoCD Application.
+# Empty = manage the Secret by hand.
+fileSecretContent: {}
 secretFileMountPath: /opt/app-root/
 
 # Non-secret config, plain env vars.
