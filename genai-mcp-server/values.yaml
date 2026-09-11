@@ -153,3 +153,16 @@ nodeSelector: {}
 tolerations: []
 affinity: {}
 hostAliases: []
+
+# In-cluster Redis for the session store. Ephemeral, no persistence; fine for
+# stg. Set enabled=false and point REDIS_URL elsewhere for prod.
+redis:
+  enabled: false
+  image: redis:7-alpine
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
