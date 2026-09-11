@@ -17,7 +17,7 @@ image:
   pullPolicy: IfNotPresent
 
 imagePullSecrets:
-  - name: image-pull-secret
+  - name: image-pull-secret-genai
 
 imagePullSecretContent: ""
 # Secret holding MS_TENANT_ID / MS_CLIENT_ID / REDIS_URL / ... injected via envFrom.
