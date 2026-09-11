@@ -28,7 +28,7 @@ metadata:
   labels:
     {{- include "app.labels" $ | nindent 4 }}
 spec:
-  type: {{ .type | default "ClusterIP" }}
+  type: {{ .type | default "NodePort" }}
   ports:
     - port: {{ .port }}
       targetPort: {{ include "app.portName" . }}

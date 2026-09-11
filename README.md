@@ -30,6 +30,10 @@ and `existingSecretFile` (mounted files).
     serviceaccount.yaml  vpa.yaml
 ```
 
+Services are `NodePort` by convention (`service.type` in `values.yaml`, and the
+default for `extraServices`). Only set `ClusterIP` explicitly on a service that
+must stay in-cluster, e.g. the Cube SQL endpoint.
+
 `data-context-layer` additionally has `values-worker.yaml`: the refresh worker is
 a **second release of the same chart** (same image, `CUBEJS_REFRESH_WORKER=true`,
 no ingress/probes) rather than a second Deployment template.
