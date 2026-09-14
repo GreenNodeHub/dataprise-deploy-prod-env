@@ -59,6 +59,9 @@ service:
 # Additional Services on other container ports (none for this app).
 extraServices: []
 
+ingress:
+  enabled: false
+
 resources:
   requests:
     cpu: 500m
