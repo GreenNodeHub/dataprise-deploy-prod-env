@@ -69,7 +69,7 @@ extraServices:
     port: 15432
 
 ingress:
-  enabled: true
+  enabled: false
   className: nginx
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
