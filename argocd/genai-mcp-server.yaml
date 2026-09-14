@@ -15,7 +15,7 @@ spec:
       parameters:
         # Set by CI on each build; everything else lives in values.yaml.
         - name: image.tag
-          value: "b4b02f1-stg-data-mcp-tools-39"
+          value: "6280ea3-stg-data-mcp-tools-40"
   destination:
     server: https://kubernetes.default.svc
     namespace: stg-genai-platform
