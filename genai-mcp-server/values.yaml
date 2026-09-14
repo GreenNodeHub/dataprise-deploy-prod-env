@@ -39,7 +39,7 @@ env:
   - name: PORT
     value: "3232"
   - name: BASE_URI
-    value: https://genai-mcp-server.vngcloud.tech
+    value: https://data-mcp.greennode.vn
   - name: AUTH_MODE
     value: internal
   - name: DATASOURCES_CONFIG
@@ -58,26 +58,6 @@ service:
 
 # Additional Services on other container ports (none for this app).
 extraServices: []
-
-ingress:
-  enabled: true
-  className: nginx
-  annotations:
-    nginx.ingress.kubernetes.io/proxy-connect-timeout: "10"
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
-    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
-    # SSE/streamable-HTTP transports must not be buffered by the proxy.
-    nginx.ingress.kubernetes.io/proxy-buffering: "off"
-    nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
-  hosts:
-    - host: genai-mcp-server.vngcloud.tech
-      paths:
-        - path: /
-          pathType: Prefix
-  tls:
-    - secretName: cert-console-vngcloud-tech
-      hosts:
-        - genai-mcp-server.vngcloud.tech
 
 resources:
   requests:
