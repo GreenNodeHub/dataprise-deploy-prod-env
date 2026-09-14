@@ -13,7 +13,7 @@ replicaCount: 1
 image:
   registry: vcr.vngcloud.vn
   repository: 60108-backend-worker/portal-external/stg/genai-mcp-server
-  tag: "fe8316d-stg-data-mcp-tools-43"
+  tag: "b91da31-stg-data-mcp-tools-47"
   pullPolicy: IfNotPresent
 
 imagePullSecrets:
