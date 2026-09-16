@@ -17,7 +17,7 @@ replicaCount: 1
 image:
   registry: vcr.vngcloud.vn
   repository: 60108-backend-worker/portal-external/stg/data-context-layer
-  tag: "fbf1f97-stg-deploy-cube-46"
+  tag: "d89505e-stg-deploy-cube-47"
   pullPolicy: IfNotPresent
 
 imagePullSecrets:
