@@ -13,7 +13,7 @@ replicaCount: 1
 image:
   registry: vcr.vngcloud.vn
   repository: 60108-backend-worker/portal-external/stg/genai-mcp-server
-  tag: "a5f070d-stg-secured-authorization-61"
+  tag: "e8c1595-stg-secured-authorization-62"
   pullPolicy: IfNotPresent
 
 imagePullSecrets:
