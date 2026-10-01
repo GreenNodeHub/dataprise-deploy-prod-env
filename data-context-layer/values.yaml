@@ -29,6 +29,14 @@ imagePullSecretContent: ""
 # (same values as the genai-mcp-server release). Sourced from Vault at
 # Portal/Stg/stg-genai-platform/data-context-layer, not from this chart.
 existingSecret: data-context-layer-env
+# Key/values for the Secret above, filled from the ArgoCD Application. Values
+# stay empty here on purpose -- this file is tracked in git.
+# NOTE: a non-empty map makes the chart own the Secret, so EVERY key the
+# workload needs must be listed here. The CUBEJS_* keys are NOT listed, which
+# means this block only works if Vault/kubectl is no longer the source for them.
+envSecretContent:
+  DATAPRISE_CREDENTIALS_DATABASE_URL: ""
+  DATAPRISE_CREDENTIALS_MASTER_KEY: ""
 existingSecretFile: ""
 secretFileMountPath: /config
 
