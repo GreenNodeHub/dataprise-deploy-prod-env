@@ -20,9 +20,17 @@ imagePullSecrets:
   - name: image-pull-secret-genai
 
 imagePullSecretContent: ""
-# Secret holding MS_TENANT_ID / MS_CLIENT_ID / REDIS_URL / ... injected via envFrom.
-# Must already exist in the namespace (see secret.example.yaml).
+# Secret holding MS_TENANT_ID / MS_CLIENT_ID / REDIS_URL /
+# DATAPRISE_CREDENTIALS_* / ... injected via envFrom. Either apply it by hand
+# (see secret.example.yaml) or let envSecretContent below create it.
 existingSecret: genai-mcp-server-env
+# Key/values for the env Secret above, filled from the ArgoCD Application.
+# Values stay empty here on purpose -- this file is tracked in git.
+# NOTE: a non-empty map makes the chart own genai-mcp-server-env, so EVERY key
+# the workload needs must be listed here, not only the ones below.
+envSecretContent:
+  DATAPRISE_CREDENTIALS_DATABASE_URL: ""
+  DATAPRISE_CREDENTIALS_MASTER_KEY: ""
 # Secret mounted as files (datasources.json). Empty disables the mount.
 existingSecretFile: genai-mcp-server-file
 # Base64-encoded file contents, filled from the ArgoCD Application.
