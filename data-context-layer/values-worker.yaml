@@ -17,6 +17,10 @@ env:
     value: "true"
   - name: CUBEJS_DEV_MODE
     value: "true"
+  # Resolve the caller's identity through the datasource mapping rather than a
+  # single static service account; needs DATAPRISE_CREDENTIALS_* in the Secret.
+  - name: CUBEJS_AUTH_MODE
+    value: mapping
   - name: CUBEJS_DB_TYPE
     value: hive
   - name: CUBEJS_JDBC_DRIVER

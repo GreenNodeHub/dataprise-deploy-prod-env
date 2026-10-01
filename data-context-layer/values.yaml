@@ -17,14 +17,17 @@ replicaCount: 1
 image:
   registry: vcr.vngcloud.vn
   repository: 60108-backend-worker/portal-external/stg/data-context-layer
-  tag: "ecfc633-stg-secured-authorization-50"
+  tag: "c295b7a-stg-secured-authorization-51"
   pullPolicy: IfNotPresent
 
 imagePullSecrets:
   - name: image-pull-secret
 
 imagePullSecretContent: ""
-# Holds CUBEJS_JDBC_URL, CUBEJS_DB_USER, CUBEJS_DB_PASS, CUBEJS_API_SECRET.
+# Holds CUBEJS_JDBC_URL, CUBEJS_DB_USER, CUBEJS_DB_PASS, CUBEJS_API_SECRET
+# and DATAPRISE_CREDENTIALS_DATABASE_URL / DATAPRISE_CREDENTIALS_MASTER_KEY
+# (same values as the genai-mcp-server release). Sourced from Vault at
+# Portal/Stg/stg-genai-platform/data-context-layer, not from this chart.
 existingSecret: data-context-layer-env
 existingSecretFile: ""
 secretFileMountPath: /config
@@ -34,6 +37,10 @@ env:
     value: Asia/Ho_Chi_Minh
   - name: CUBEJS_DEV_MODE
     value: "true"
+  # Resolve the caller's identity through the datasource mapping rather than a
+  # single static service account; needs DATAPRISE_CREDENTIALS_* in the Secret.
+  - name: CUBEJS_AUTH_MODE
+    value: mapping
   - name: CUBEJS_DB_TYPE
     value: hive
   - name: CUBEJS_JDBC_DRIVER
