@@ -17,7 +17,7 @@ replicaCount: 1
 image:
   registry: vcr.vngcloud.vn
   repository: 60108-backend-worker/portal-external/stg/data-context-layer
-  tag: "c295b7a-stg-secured-authorization-51"
+  tag: "84ffd22-stg-secured-authorization-52"
   pullPolicy: IfNotPresent
 
 imagePullSecrets:
