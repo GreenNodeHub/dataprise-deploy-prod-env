@@ -13,7 +13,7 @@ replicaCount: 1
 image:
   registry: vcr.vngcloud.vn
   repository: 60108-backend-worker/portal-external/stg/genai-mcp-server
-  tag: "e8c1595-stg-secured-authorization-62"
+  tag: "d729ddb-stg-observability-tracing-64"
   pullPolicy: IfNotPresent
 
 imagePullSecrets:
@@ -31,6 +31,13 @@ existingSecret: genai-mcp-server-env
 envSecretContent:
   DATAPRISE_CREDENTIALS_DATABASE_URL: ""
   DATAPRISE_CREDENTIALS_MASTER_KEY: ""
+  # OpenSearch monitoring (opt-in: empty URL leaves it off). No user:pass@ in
+  # the URL -- credentials go in the two keys below it.
+  OPENSEARCH_MONITORING_URL: ""
+  OPENSEARCH_MONITORING_USERNAME: ""
+  OPENSEARCH_MONITORING_PASSWORD: ""
+  # OTLP collector auth for tracing (see OTEL_* in env below).
+  OTEL_EXPORTER_OTLP_HEADERS: ""
 # Secret mounted as files (datasources.json). Empty disables the mount.
 existingSecretFile: genai-mcp-server-file
 # Base64-encoded file contents, filled from the ArgoCD Application.
@@ -56,6 +63,12 @@ env:
   # are read from the last X-Forwarded-For entry.
   - name: TRUST_PROXY
     value: "1"
+  # Tracing, opt-in: an empty endpoint leaves it off. OTEL_SERVICE_NAME is also
+  # the service name stamped on OpenSearch events.
+  - name: OTEL_EXPORTER_OTLP_ENDPOINT
+    value: ""
+  - name: OTEL_SERVICE_NAME
+    value: genai-mcp-server
 
 extraEnvFrom: []
 
