@@ -13,7 +13,7 @@ replicaCount: 1
 image:
   registry: vcr.vngcloud.vn
   repository: 60108-backend-worker/portal-external/stg/genai-mcp-server
-  tag: "d729ddb-stg-observability-tracing-64"
+  tag: "fee7fe8-stg-observability-tracing-65"
   pullPolicy: IfNotPresent
 
 imagePullSecrets:
